@@ -137,7 +137,7 @@ def run_plot(topic: str, bootstrap: str, group: str, mode: str):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--topic", required=True)
-    parser.add_argument("--bootstrap", default="164.92.76.15:9092")
+    parser.add_argument("--bootstrap", default="iot.redesuvg.cloud:9092")
     parser.add_argument("--mode", choices=["json", "compact"], default="json")
     parser.add_argument("--group", default="lab9-plot-group")
     args = parser.parse_args()

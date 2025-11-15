@@ -23,7 +23,7 @@ def handle_sigterm(signum, frame):
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--topic", required=True, help="Kafka topic to publish to")
-    parser.add_argument("--bootstrap", default="164.92.76.15:9092", help="Bootstrap server")
+    parser.add_argument("--bootstrap", default="iot.redesuvg.cloud:9092", help="Bootstrap server")
     parser.add_argument("--mode", choices=["json", "compact"], default="json")
     parser.add_argument("--min-interval", type=int, default=15)
     parser.add_argument("--max-interval", type=int, default=30)
