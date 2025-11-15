@@ -27,3 +27,13 @@ python .\consumer.py --topic 22764-22249
 ### **Gráfico**
 
 python .\consumer_plot.py --topic 22764-22249
+
+
+
+## **Producer parte 3.4**
+python .\producer.py --topic 22764-22249-compact --mode compact
+
+
+## **Consumer parte 3.4**
+python .\consumer.py --topic 22764-22249-compact --mode compact
+

@@ -52,9 +52,18 @@ def main() -> None:
                 # will raise if encoder.encode_compact fails
                 value = encoder.encode_compact(reading)
 
+            # when in compact mode, also print the raw 3-byte payload in hex for evidence
+            if args.mode == "compact":
+                try:
+                    # value is raw bytes here
+                    print("Sent (bytes):", value.hex())
+                except Exception:
+                    pass
+
             # send (key can be None or sensor id)
             producer.send(args.topic, value=value)
             producer.flush()
+            # Print the human-readable reading and (for compact mode) the raw bytes already printed above
             print(f"Sent: {reading}")
 
             interval = random.uniform(args.min_interval, args.max_interval)

@@ -35,16 +35,18 @@ def main() -> None:
             auto_offset_reset="earliest",
             enable_auto_commit=True,
             group_id=args.group,
+            # for JSON mode we deserialize here
             value_deserializer=lambda b: json.loads(b.decode("utf-8")),
         )
     else:
+        # In compact mode we receive raw bytes and decode inside the loop
         consumer = KafkaConsumer(
             args.topic,
             bootstrap_servers=[args.bootstrap],
             auto_offset_reset="earliest",
             enable_auto_commit=True,
             group_id=args.group,
-            value_deserializer=lambda b: encoder.decode_compact(b),
+            value_deserializer=lambda b: b,
         )
 
     temps: List[float] = []
@@ -56,7 +58,20 @@ def main() -> None:
         for msg in consumer:
             if STOP:
                 break
+            # msg.value may be bytes (compact) or already-deserialized JSON
             payload = msg.value
+            if args.mode == "compact":
+                # show raw bytes for evidence (hex) then decode
+                try:
+                    if isinstance(msg.value, (bytes, bytearray)):
+                        print("Raw bytes:", msg.value.hex())
+                except Exception:
+                    pass
+                try:
+                    payload = encoder.decode_compact(msg.value)
+                except Exception:
+                    print("Warning: failed to decode compact payload; skipping")
+                    continue
             print("Received:", payload)
             try:
                 temps.append(float(payload.get("temperatura")))
